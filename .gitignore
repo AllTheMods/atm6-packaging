@@ -1,3 +1,5 @@
 *.zip
 *.json
 overrides
+cache
+server
