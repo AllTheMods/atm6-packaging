@@ -39,7 +39,7 @@ $ignore = @(
     "60089" ,# Mouse Tweaks
     "446253", # Better Biome Blend
     "502561", # Equipment Compare
-    "403499"
+    "403499" # JEI Professions
 )
 
 
