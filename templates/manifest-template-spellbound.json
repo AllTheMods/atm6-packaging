@@ -1,0 +1,18 @@
+{
+    "minecraft": {
+      "version": "1.16.5",
+      "modLoaders": [
+        {
+          "id": "forge-@version@",
+          "primary": true
+        }
+      ]
+    },
+    "manifestType": "minecraftModpack",
+    "overrides": "overrides",
+    "manifestVersion": 1,
+    "version": "@version@",
+    "author": "Spellbound Team",
+    "name": "All The Magic: Spellbound",
+    "files": []
+}

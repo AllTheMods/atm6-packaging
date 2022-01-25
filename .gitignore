@@ -1,5 +1,5 @@
-*.zip
-*.json
+/*.zip
+/*.json
 overrides
 cache
 server
