@@ -1,7 +1,7 @@
 param([string]$version = "")
 $ErrorActionPreference = "Stop"
 
-$source = "C:\Games\CurseForge\Minecraft\Instances\Spellbound"
+$source = "C:\Games\CurseForge\Minecraft\Instances\All the Mods - Slice of Pi2 - ATM SLOP2 - ATM6 Lite"
 $overridePath = "$PSScriptRoot\overrides"
 $manifestPath = "$PSScriptRoot\manifest.json"
 $serverPath = "$PSScriptRoot\server"
@@ -36,7 +36,7 @@ $ignore = @(
     "532127", # Legendary Tooltips
     "499826", # Advancement Plaques
     "348521", # Cloth Config API
-    "60089" ,# Mouse Tweaks
+    "60089" , # Mouse Tweaks
     "446253", # Better Biome Blend
     "502561", # Equipment Compare
     "403499" # JEI Professions
@@ -44,7 +44,7 @@ $ignore = @(
 
 
 if ( -Not (Test-Path $source)) {
-    Write-Host "No CurseForge instance found with the name Spellbound" -ForegroundColor Red
+    Write-Host "No CurseForge instance found at '$source'" -ForegroundColor Red
     exit 1
 }
 
@@ -54,8 +54,8 @@ Copy-Item -Path "$source/*" -Include "config", "defaultconfigs", "kubejs", "pack
 if ($version.Length -eq 0) {
     $tweaks = "$overridePath\config\allthetweaks-common.toml"
     $version = @("major", "minor", "minorrev") | ForEach-Object {
-        Select-String -Path $tweaks -Pattern "$_ = (\d+)" | ForEach-Object {$_.matches.Groups[1].value}
-    } | Join-String -Separator "."    
+        Select-String -Path $tweaks -Pattern "$_ = (\d+)" | ForEach-Object { $_.matches.Groups[1].value }
+    } | Join-String -Separator "."
 }
 
 Write-Host "Loading CurseForge manifest..."
@@ -85,9 +85,10 @@ if (-Not (Test-Path -Path $installedPath)) {
     try {
         Push-Location -Path $installedPath
         java -jar $installerPath -installServer
-    } finally {
+    }
+    finally {
         Pop-Location
-    }    
+    }
 }
 
 Write-Host "Server installation done."
@@ -95,7 +96,7 @@ Write-Host "Server installation done."
 # end generate Forge server files
 # start generate server pack
 
-$serverDest = "Spellbound-dev-$version-server.zip"
+$serverDest = "SLOP2-dev-$version-server.zip"
 Write-Host "Writing server zip to: $serverDest"
 
 if (Test-Path $serverDest) {
@@ -105,18 +106,18 @@ if (Test-Path $serverDest) {
 
 
 New-Item -Path $modsPath  -Type Directory -Force | Out-Null
-foreach($mod in $instanceJson.installedAddons) {
+foreach ($mod in $instanceJson.installedAddons) {
     if (-Not ($ignore -contains $mod.addonID)) {
         $filename = $mod.installedFile.FileNameOnDisk
         Copy-Item -Path "$source\mods\$filename" -Destination "$modsPath\$filename"
     }
 }
 
-Get-Content "$PSScriptRoot\templates\startserver-template.bat" -raw | ForEach-Object {$_.replace('@version@', $forgeVersion)} | Set-Content $batPath
-Get-Content "$PSScriptRoot\templates\startserver-template.sh" -raw | ForEach-Object {$_.replace('@version@', $forgeVersion)} | Set-Content $shPath
+Get-Content "$PSScriptRoot\templates\startserver-template.bat" -raw | ForEach-Object { $_.replace('@version@', $forgeVersion) } | Set-Content $batPath
+Get-Content "$PSScriptRoot\templates\startserver-template.sh" -raw | ForEach-Object { $_.replace('@version@', $forgeVersion) } | Set-Content $shPath
 
 $compress = @{
-    Path = @(
+    Path             = @(
         "$overridePath/config",
         "$overridePath/defaultconfigs",
         "$overridePath/kubejs",
@@ -125,7 +126,7 @@ $compress = @{
         "$tmpPath/*"
     )
     CompressionLevel = "Fastest"
-    DestinationPath = $serverDest
+    DestinationPath  = $serverDest
 }
 
 Compress-Archive @compress
@@ -137,22 +138,22 @@ Remove-Item -Recurse -Force -Path $tmpPath
 # start generate client pack
 
 Write-Host "Generating manifest for version: $version"
-$manifestJson = Get-Content "$PSScriptRoot\templates\manifest-template-spellbound.json" -raw | ConvertFrom-Json
+$manifestJson = Get-Content "$PSScriptRoot\templates\manifest-template-slop2.json" -raw | ConvertFrom-Json
 
 $manifestJson.minecraft.modLoaders[0].id = "forge-${forgeVersion}"
 $manifestJson.version = $version
 
-foreach($mod in $instanceJson.installedAddons) {
+foreach ($mod in $instanceJson.installedAddons) {
     $manifestJson.files += @{
         projectID = $mod.addonID
-        fileID = $mod.installedFile.id
-        required = $true
+        fileID    = $mod.installedFile.id
+        required  = $true
     }
 }
 
 $manifestJson | ConvertTo-Json -Depth 32 | Set-Content $manifestPath
 
-$dest = "Spellbound-dev-$version.zip";
+$dest = "SLOP2-dev-$version.zip";
 Write-Host "Writing client zip to: $dest"
 
 if (Test-Path $dest) {
@@ -161,9 +162,9 @@ if (Test-Path $dest) {
 }
 
 $compress = @{
-    Path = $manifestPath, $overridePath
+    Path             = $manifestPath, $overridePath
     CompressionLevel = "Fastest"
-    DestinationPath = $dest
+    DestinationPath  = $dest
 }
 
 Compress-Archive @compress

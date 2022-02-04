@@ -1,6 +1,6 @@
 # ATM6 Packager
 
-#### This script requires Powershell 7 (included with VS Code).
+#### This script requires Powershell 7 (available from https://github.com/PowerShell/PowerShell).
 
 This script expects that you have a Curseforge instance named `All_The_Mods_6`, located in `C:\Games\CurseForge\Minecraft\Instances\`. 
 

@@ -1,0 +1,18 @@
+{
+    "minecraft": {
+      "version": "1.16.5",
+      "modLoaders": [
+        {
+          "id": "forge-@version@",
+          "primary": true
+        }
+      ]
+    },
+    "manifestType": "minecraftModpack",
+    "overrides": "overrides",
+    "manifestVersion": 1,
+    "version": "@version@",
+    "author": "Maddy and the ATM Team",
+    "name": "All The Mods: Slice of Pi 2",
+    "files": []
+}
