@@ -36,9 +36,10 @@ $ignore = @(
     "532127", # Legendary Tooltips
     "499826", # Advancement Plaques
     "348521", # Cloth Config API
-    "60089" ,# Mouse Tweaks
+    "60089" , # Mouse Tweaks
     "446253", # Better Biome Blend
-    "502561" # Equipment Compare
+    "502561", # Equipment Compare
+    "448233" # Entity Culling
 )
 
 if ( -Not (Test-Path $source)) {
