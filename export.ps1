@@ -39,7 +39,7 @@ $ignore = @(
     "60089" , # Mouse Tweaks
     "446253", # Better Biome Blend
     "502561", # Equipment Compare
-    "409087" # Entity Culling
+    "448233" # Entity Culling
 )
 
 if ( -Not (Test-Path $source)) {
