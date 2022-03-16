@@ -22,20 +22,24 @@ $updated = [System.Collections.ArrayList]::new();
 $removed = [System.Collections.ArrayList]::new($oldMods)
 
 foreach($mod in $newMods) {
-    $slug = [System.IO.Path]::GetFileName($mod.FullName) -replace '[^a-zA-Z-_]+','';
+    $modFilename = [System.IO.Path]::GetFileName($mod.FullName);
+    $slug = $modFilename -replace '[^a-zA-Z-_]+','';
     $matched = $false;
     foreach($oldMod in $oldMods) {
-        $oldSlug = [System.IO.Path]::GetFileName($oldMod.FullName) -replace '[^a-zA-Z-_]+','';
+        $oldFilename = [System.IO.Path]::GetFileName($oldMod.FullName)
+        $oldSlug = $oldFilename -replace '[^a-zA-Z-_]+','';
         if ($slug -eq $oldSlug) {
             $matched = $true;
-            $updated.Add([System.IO.Path]::GetFileName($mod.FullName)) | Out-Null
+            if ($modFilename -ne $oldFilename) {
+                $updated.Add([System.IO.Path]::GetFileName($mod.FullName)) | Out-Null
+            }
             $removed.Remove($oldMod)
             break;
         }
     }
 
     if ($matched -eq $false) {
-        $added.Add([System.IO.Path]::GetFileName($mod.FullName)) | Out-Null
+        $added.Add($modFilename) | Out-Null
     }
 }
 
