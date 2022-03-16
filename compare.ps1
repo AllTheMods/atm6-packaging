@@ -23,11 +23,11 @@ $removed = [System.Collections.ArrayList]::new($oldMods)
 
 foreach($mod in $newMods) {
     $modFilename = [System.IO.Path]::GetFileName($mod.FullName);
-    $slug = $modFilename -replace '[^a-zA-Z-_]+','';
+    $slug = $modFilename -replace '[^a-zA-Z_]+','' -replace 'hotfix|RELEASE|BETA|ALPHA','';
     $matched = $false;
     foreach($oldMod in $oldMods) {
         $oldFilename = [System.IO.Path]::GetFileName($oldMod.FullName)
-        $oldSlug = $oldFilename -replace '[^a-zA-Z-_]+','';
+        $oldSlug = $oldFilename -replace '[^a-zA-Z_]+','' -replace 'hotfix|RELEASE|BETA|ALPHA','';
         if ($slug -eq $oldSlug) {
             $matched = $true;
             if ($modFilename -ne $oldFilename) {
@@ -57,14 +57,10 @@ if ($updated.Length -gt 0) {
         Write-Output "- $name"
     }    
 }
-
-if ($oldMods.Length -gt 0) {
+if ($removed.Length -gt 0) {
     Write-Output "### Mod Removals"
     foreach ($mod in $removed) {
         $name = [System.IO.Path]::GetFileName($mod.FullName)
         Write-Output "- $name"
     }    
-
 }
-
-
