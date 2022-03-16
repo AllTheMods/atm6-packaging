@@ -31,7 +31,7 @@ foreach($mod in $newMods) {
         if ($slug -eq $oldSlug) {
             $matched = $true;
             if ($modFilename -ne $oldFilename) {
-                $updated.Add([System.IO.Path]::GetFileName($mod.FullName)) | Out-Null
+                $updated.Add($modFilename) | Out-Null
             }
             $removed.Remove($oldMod)
             break;
@@ -46,23 +46,23 @@ foreach($mod in $newMods) {
 
 # render
 if ($added.Length -gt 0) {
-    Write-Host "### Mod Additions"
+    Write-Output "### Mod Additions"
     foreach ($name in $added) {
-        Write-Host "- $name"
+        Write-Output "- $name"
     }    
 }
 if ($updated.Length -gt 0) {
-    Write-Host "### Mod Updates"
+    Write-Output "### Mod Updates"
     foreach ($name in $updated) {
-        Write-Host "- $name"
+        Write-Output "- $name"
     }    
 }
 
 if ($oldMods.Length -gt 0) {
-    Write-Host "### Mod Removals"
+    Write-Output "### Mod Removals"
     foreach ($mod in $removed) {
         $name = [System.IO.Path]::GetFileName($mod.FullName)
-        Write-Host "- $name"
+        Write-Output "- $name"
     }    
 
 }
