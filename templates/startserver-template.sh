@@ -1,5 +1,4 @@
 #!/bin/bash
-set -euo pipefail
 MAX_RAM=5G
 MIN_RAM=5G
 FORGE_VERSION=@version@
