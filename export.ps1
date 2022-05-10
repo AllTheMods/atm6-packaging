@@ -116,8 +116,8 @@ foreach($mod in $instanceJson.installedAddons) {
     }
 }
 
-Get-Content "$PSScriptRoot\templates\startserver-template.bat" -raw | % {$_.replace('@version@', $forgeVersion)} | Set-Content $batPath
-Get-Content "$PSScriptRoot\templates\startserver-template.sh" -raw | % {$_.replace('@version@', $forgeVersion)} | Set-Content $shPath
+Get-Content "$PSScriptRoot\templates\startserver-template.bat" -raw | % {$_.replace('@version@', $forgeVersion)} | Set-Content -NoNewline $batPath
+Get-Content "$PSScriptRoot\templates\startserver-template.sh" -raw | % {$_.replace('@version@', $forgeVersion)} | Set-Content -NoNewline $shPath
 
 $compress = @{
     Path = @(
