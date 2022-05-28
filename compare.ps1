@@ -2,7 +2,7 @@ param([string]$version)
 $ErrorActionPreference = "Stop"
 
 $source = "C:\Games\CurseForge\Minecraft\Instances\All_The_Mods_6\mods\"
-$multimc = "C:\Games\MultiMC\instances\ATM6 - $version\minecraft\mods\"
+$multimc = "C:\Games\CurseForge\Minecraft\Instances\All the Mods 6 - ATM6 - 1.16.5\mods"
 
 
 if ( -Not (Test-Path $source)) {
