@@ -40,7 +40,7 @@ $ignore = @(
     "446253", # Better Biome Blend
     "502561", # Equipment Compare
     "403499", # JEI Professions
-    "442246" # ATM6-sky
+    "442246" # ATM6TTS
 )
 
 
@@ -97,7 +97,7 @@ Write-Host "Server installation done."
 # end generate Forge server files
 # start generate server pack
 
-$serverDest = "ATM6-sky-dev-$version-server.zip"
+$serverDest = "ATM6TTS-dev-$version-server.zip"
 Write-Host "Writing server zip to: $serverDest"
 
 if (Test-Path $serverDest) {
@@ -154,7 +154,7 @@ foreach ($mod in $instanceJson.installedAddons) {
 
 $manifestJson | ConvertTo-Json -Depth 32 | Set-Content $manifestPath
 
-$dest = "ATM6-sky-dev-$version.zip";
+$dest = "ATM6TTS-dev-$version.zip";
 Write-Host "Writing client zip to: $dest"
 
 if (Test-Path $dest) {
