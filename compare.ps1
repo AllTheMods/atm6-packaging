@@ -1,4 +1,3 @@
-param([string]$version)
 $ErrorActionPreference = "Stop"
 
 $source = "C:\Games\CurseForge\Minecraft\Instances\All_The_Mods_6\mods\"
@@ -11,7 +10,7 @@ if ( -Not (Test-Path $source)) {
 }
 
 if ( -Not (Test-Path $multimc)) {
-    Write-Host "No MultiMC instance found with the name ATM6 - $version" -ForegroundColor Red
+    Write-Host "No MultiMC instance found with the name All the Mods 6 - ATM6 - 1.16.5" -ForegroundColor Red
     exit 1
 }
 
@@ -23,11 +22,11 @@ $removed = [System.Collections.ArrayList]::new($oldMods)
 
 foreach($mod in $newMods) {
     $modFilename = [System.IO.Path]::GetFileName($mod.FullName);
-    $slug = $modFilename -replace '[^a-zA-Z_]+','' -replace 'hotfix|RELEASE|BETA|ALPHA','';
+    $slug = $modFilename -replace '[^a-zA-Z_]+','' -replace 'forge|hotfix|RELEASE|BETA|ALPHA','';
     $matched = $false;
     foreach($oldMod in $oldMods) {
         $oldFilename = [System.IO.Path]::GetFileName($oldMod.FullName)
-        $oldSlug = $oldFilename -replace '[^a-zA-Z_]+','' -replace 'hotfix|RELEASE|BETA|ALPHA','';
+        $oldSlug = $oldFilename -replace '[^a-zA-Z_]+','' -replace 'forge|hotfix|RELEASE|BETA|ALPHA','';
         if ($slug -eq $oldSlug) {
             $matched = $true;
             if ($modFilename -ne $oldFilename) {

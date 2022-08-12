@@ -1,7 +1,7 @@
 param([string]$version = "")
 $ErrorActionPreference = "Stop"
 
-$source = "C:\Games\CurseForge\Minecraft\Instances\All_The_Mods_6"
+$source = "C:\Games\CurseForge\Minecraft\Instances\slop 3 dev"
 $overridePath = "$PSScriptRoot\overrides"
 $manifestPath = "$PSScriptRoot\manifest.json"
 $serverPath = "$PSScriptRoot\server"
@@ -12,54 +12,24 @@ $batPath = "$tmpPath\startserver.bat"
 $shPath = "$tmpPath\startserver.sh"
 
 $ignore = @(
-    "263420", # Xaero's Minimap
-    "317780", # Xaero's World Map
-    "232131", # Default Options
-    "231275", # Ding
-    "367706", # FancyMenu
-    "261725", # ItemZoom
-    "243863", # No Potion Shift
-    "305373", # Reload Audio Driver
-    "325492", # Light Overlay
-    "296468", # NoFog
-    "308240", # Cherished Worlds
-    "362791", # Cull Particles
-    "291788", # Server Tab Info
-    "326950", # Screenshot to Clipboard
-    "237701", # ReAuth
-    "391382", # MoreOverlays
-    "358191", # PackMenu
-    "271740", # Toast Control
-    "428199", # Out Of Sight
     "431430", # FlickerFix
-    "240630", # Just Enough Resources
-    "532127", # Legendary Tooltips
-    "499826", # Advancement Plaques
-    "348521", # Cloth Config API
-    "60089" , # Mouse Tweaks
-    "446253", # Better Biome Blend
-    "502561", # Equipment Compare
-    "448233", # Entity Culling
-    "280294" # FPS Reducer
+    "60089"   # Mouse Tweaks
 )
 
+
 if ( -Not (Test-Path $source)) {
-    Write-Host "No CurseForge instance found with the name All_The_Mods_6" -ForegroundColor Red
+    Write-Host "No CurseForge instance found at '$source'" -ForegroundColor Red
     exit 1
 }
 
-if ( -Not (Test-Path $overridePath)) {
-    Write-Host "Cloning configuration repo."
-    git clone --branch Staging --depth 1 --single-branch https://github.com/AllTheMods/ATM-6.git $overridePath
-}
-
-Get-ChildItem $overridePath -Exclude "config", "defaultconfigs", "kubejs", "packmenu" | Remove-Item -Recurse
+New-Item -Path $overridePath -Type Directory -Force | Out-Null
+Copy-Item -Path "$source/*" -Include "config", "defaultconfigs", "kubejs", "packmenu" -Destination $overridePath -Recurse -Force
 
 if ($version.Length -eq 0) {
     $tweaks = "$overridePath\config\allthetweaks-common.toml"
     $version = @("major", "minor", "minorrev") | ForEach-Object {
-        Select-String -Path $tweaks -Pattern "$_ = (\d+)" | ForEach-Object {$_.matches.Groups[1].value}
-    } | Join-String -Separator "."    
+        Select-String -Path $tweaks -Pattern "$_ = (\d+)" | ForEach-Object { $_.matches.Groups[1].value }
+    } | Join-String -Separator "."
 }
 
 Write-Host "Loading CurseForge manifest..."
@@ -72,7 +42,7 @@ Write-Host "Manifest uses Forge $forgeVersion."
 
 # start generate Forge server files
 
-$installerUrl = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.5-${forgeVersion}/forge-1.16.5-${forgeVersion}-installer.jar"
+$installerUrl = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.18.2-${forgeVersion}/forge-1.18.2-${forgeVersion}-installer.jar"
 $installerFile = Split-Path -Path $installerUrl -Leaf
 $installerPath = "$cachePath\$installerFile"
 $installedPath = "$serverPath\forge-${forgeVersion}"
@@ -89,9 +59,10 @@ if (-Not (Test-Path -Path $installedPath)) {
     try {
         Push-Location -Path $installedPath
         java -jar $installerPath -installServer
-    } finally {
+    }
+    finally {
         Pop-Location
-    }    
+    }
 }
 
 Write-Host "Server installation done."
@@ -99,7 +70,7 @@ Write-Host "Server installation done."
 # end generate Forge server files
 # start generate server pack
 
-$serverDest = "ATM6-dev-$version-server.zip"
+$serverDest = "SLOP3-dev-$version-server.zip"
 Write-Host "Writing server zip to: $serverDest"
 
 if (Test-Path $serverDest) {
@@ -109,25 +80,29 @@ if (Test-Path $serverDest) {
 
 
 New-Item -Path $modsPath  -Type Directory -Force | Out-Null
-foreach($mod in $instanceJson.installedAddons) {
+foreach ($mod in $instanceJson.installedAddons) {
     if (-Not ($ignore -contains $mod.addonID)) {
         $filename = $mod.installedFile.FileNameOnDisk
         Copy-Item -Path "$source\mods\$filename" -Destination "$modsPath\$filename"
     }
 }
 
-Get-Content "$PSScriptRoot\templates\startserver-template.bat" -raw | % {$_.replace('@version@', $forgeVersion)} | Set-Content -NoNewline $batPath
-Get-Content "$PSScriptRoot\templates\startserver-template.sh" -raw | % {$_.replace('@version@', $forgeVersion)} | Set-Content -NoNewline $shPath
+Copy-Item -Path "$PSScriptRoot\templates\user_jvm_args-slop3.txt" -Destination "$tmpPath\user_jvm_args.txt"
+# Get-Content "$PSScriptRoot\templates\startserver-template.bat" -raw | ForEach-Object { $_.replace('@version@', $forgeVersion) } | Set-Content $batPath
+# Get-Content "$PSScriptRoot\templates\startserver-template.sh" -raw | ForEach-Object { $_.replace('@version@', $forgeVersion) } | Set-Content $shPath
 
 $compress = @{
-    Path = @(
+    Path             = @(
         "$overridePath/config",
         "$overridePath/defaultconfigs",
         "$overridePath/kubejs",
+        "$installedPath/libraries",
+        "$installedPath/run.bat",
+        "$installedPath/run.sh",
         "$tmpPath/*"
     )
     CompressionLevel = "Fastest"
-    DestinationPath = $serverDest
+    DestinationPath  = $serverDest
 }
 
 Compress-Archive @compress
@@ -139,22 +114,22 @@ Remove-Item -Recurse -Force -Path $tmpPath
 # start generate client pack
 
 Write-Host "Generating manifest for version: $version"
-$manifestJson = Get-Content "$PSScriptRoot\templates\manifest-template.json" -raw | ConvertFrom-Json
+$manifestJson = Get-Content "$PSScriptRoot\templates\manifest-template-slop3.json" -raw | ConvertFrom-Json
 
 $manifestJson.minecraft.modLoaders[0].id = "forge-${forgeVersion}"
 $manifestJson.version = $version
 
-foreach($mod in $instanceJson.installedAddons) {
+foreach ($mod in $instanceJson.installedAddons) {
     $manifestJson.files += @{
         projectID = $mod.addonID
-        fileID = $mod.installedFile.id
-        required = $true
+        fileID    = $mod.installedFile.id
+        required  = $true
     }
 }
 
 $manifestJson | ConvertTo-Json -Depth 32 | Set-Content $manifestPath
 
-$dest = "ATM6-dev-$version.zip";
+$dest = "SLOP3-dev-$version.zip";
 Write-Host "Writing client zip to: $dest"
 
 if (Test-Path $dest) {
@@ -163,9 +138,9 @@ if (Test-Path $dest) {
 }
 
 $compress = @{
-    Path = $manifestPath, $overridePath
+    Path             = $manifestPath, $overridePath
     CompressionLevel = "Fastest"
-    DestinationPath = $dest
+    DestinationPath  = $dest
 }
 
 Compress-Archive @compress
