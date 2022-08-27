@@ -4,10 +4,25 @@ set MIN_RAM=5G
 set FORGE_VERSION=@version@
 :: To use a specific Java runtime, set an environment variable named ATM7_JAVA to the full path of java.exe.
 
+:JAVA
 if not defined ATM7_JAVA (
     set ATM7_JAVA=java
 )
 
+"%ATM7_JAVA%" -version 1>nul 2>nul || (
+   echo Minecraft 1.18 requires Java 17 - Java not found
+   pause
+   exit /b 1
+)
+
+for /f tokens^=2-5^ delims^=.-_^" %%j in ('"%ATM7_JAVA%" -fullversion 2^>^&1') do set "jver=%%j"
+if not %jver% == 17  (
+    echo Minecraft 1.18 requires Java 17 - found Java %jver%
+    pause
+    exit /b 1
+) 
+
+:FORGE
 set INSTALLER="%~dp0forge-1.18.2-%FORGE_VERSION%-installer.jar"
 set FORGE_URL="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.18.2-%FORGE_VERSION%/forge-1.18.2-%FORGE_VERSION%-installer.jar"
 

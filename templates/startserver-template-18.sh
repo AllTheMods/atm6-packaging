@@ -7,6 +7,24 @@ FORGE_VERSION=@version@
 INSTALLER="forge-1.18.2-$FORGE_VERSION-installer.jar"
 FORGE_URL="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.18.2-$FORGE_VERSION/forge-1.18.2-$FORGE_VERSION-installer.jar"
 
+pause() {
+    printf "%s\n" "Press enter to continue..."
+    read ans
+}
+
+if ! command -v "${ATM7_JAVA:-java}" >/dev/null 2>&1; then
+    echo "Minecraft 1.18 requires Java 17 - Java not found"
+    pause
+    exit 1
+fi
+
+JAVA_VERSION=$("${ATM7_JAVA:-java}" -fullversion 2>&1 | awk -F '"' '/version/ {print $2}' | cut -d'.' -f1)
+if [ ! $JAVA_VERSION = "17" ]; then
+    echo "Minecraft 1.18 requires Java 17 - found Java $JAVA_VERSION"
+    pause
+    exit 1
+fi
+
 if [ ! -d "$0/libraries/" ]; then
     echo "Forge not installed, installing now."
     if [ ! -f "$INSTALLER" ]; then
