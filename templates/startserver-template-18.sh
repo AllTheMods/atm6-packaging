@@ -25,7 +25,8 @@ if [ ! $JAVA_VERSION = "17" ]; then
     exit 1
 fi
 
-if [ ! -d "$0/libraries/" ]; then
+cd "$(dirname "$0")"
+if [ ! -d libraries ]; then
     echo "Forge not installed, installing now."
     if [ ! -f "$INSTALLER" ]; then
         echo "No Forge installer found, downloading now."
@@ -40,6 +41,8 @@ if [ ! -d "$0/libraries/" ]; then
                 curl -o "$INSTALLER" -L "$FORGE_URL"
             else
                 echo "Neither wget or curl were found on your system. Please install one and try again"
+                pause
+                exit 1
             fi
         fi
     fi

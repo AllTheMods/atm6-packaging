@@ -4,6 +4,9 @@ set MIN_RAM=5G
 set FORGE_VERSION=@version@
 :: To use a specific Java runtime, set an environment variable named ATM7_JAVA to the full path of java.exe.
 
+set INSTALLER="%~dp0forge-1.18.2-%FORGE_VERSION%-installer.jar"
+set FORGE_URL="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.18.2-%FORGE_VERSION%/forge-1.18.2-%FORGE_VERSION%-installer.jar"
+
 :JAVA
 if not defined ATM7_JAVA (
     set ATM7_JAVA=java
@@ -23,10 +26,9 @@ if not %jver% == 17  (
 ) 
 
 :FORGE
-set INSTALLER="%~dp0forge-1.18.2-%FORGE_VERSION%-installer.jar"
-set FORGE_URL="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.18.2-%FORGE_VERSION%/forge-1.18.2-%FORGE_VERSION%-installer.jar"
-
-if not exist "%~dp0libraries\" (
+setlocal
+cd /D "%~dp0"
+if not exist "libraries" (
     echo Forge not installed, installing now.
     if not exist %INSTALLER% (
         echo No Forge installer found, downloading from %FORGE_URL%
