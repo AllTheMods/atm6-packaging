@@ -1,0 +1,18 @@
+{
+    "minecraft": {
+      "version": "1.18.2",
+      "modLoaders": [
+        {
+          "id": "forge-@version@",
+          "primary": true
+        }
+      ]
+    },
+    "manifestType": "minecraftModpack",
+    "overrides": "overrides",
+    "manifestVersion": 1,
+    "version": "@version@",
+    "author": "ATM Team",
+    "name": "All The Mods 7",
+    "files": []
+}

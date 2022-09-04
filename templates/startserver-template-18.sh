@@ -31,13 +31,11 @@ if [ ! -d libraries ]; then
     echo "Forge not installed, installing now."
     if [ ! -f "$INSTALLER" ]; then
         echo "No Forge installer found, downloading now."
-        which wget >> /dev/null
-        if [ $? -eq 0 ]; then
+        if command -v wget >/dev/null 2>&1; then
             echo "DEBUG: (wget) Downloading $FORGE_URL"
             wget -O "$INSTALLER" "$FORGE_URL"
         else
-            which curl >> /dev/null
-            if [ $? -eq 0 ]; then
+            if command -v curl >/dev/null 2>&1; then
                 echo "DEBUG: (curl) Downloading $FORGE_URL"
                 curl -o "$INSTALLER" -L "$FORGE_URL"
             else
@@ -50,6 +48,10 @@ if [ ! -d libraries ]; then
 
     echo "Running Forge installer."
     "${ATM7_JAVA:-java}" -jar "$INSTALLER" -installServer
+fi
+
+if [ ! -e server.properties ]; then
+    echo -e "allow-flight=true\nmotd=All the Mods 7" > server.properties
 fi
 
 while true

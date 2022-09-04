@@ -39,6 +39,13 @@ if not exist "libraries" (
     "%ATM7_JAVA%" -jar %INSTALLER% -installServer
 )
 
+if not exist "server.properties" (
+    (
+        echo allow-flight=true
+        echo motd=All the Mods 7
+    )> "server.properties"
+)
+
 :START
 "%ATM7_JAVA%" -Xmx%MAX_RAM% -Xms%MIN_RAM% -XX:+UseZGC @libraries/net/minecraftforge/forge/1.18.2-%FORGE_VERSION%/win_args.txt nogui
 
