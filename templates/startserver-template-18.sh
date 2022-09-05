@@ -18,7 +18,7 @@ if ! command -v "${ATM7_JAVA:-java}" >/dev/null 2>&1; then
 fi
 
 JAVA_VERSION=$("${ATM7_JAVA:-java}" -fullversion 2>&1 | awk -F '"' '/version/ {print $2}' | cut -d'.' -f1)
-if [ ! $JAVA_VERSION = "17" ]; then
+if [ ! "$JAVA_VERSION" -ge 17 ]; then
     echo "Minecraft 1.18 requires Java 17 - found Java $JAVA_VERSION"
     pause
     exit 1

@@ -103,7 +103,6 @@ $compress = @{
     CompressionLevel = "Fastest"
     DestinationPath = $serverDest
 }
-ls "$tmpPath/*"
 Compress-Archive @compress
 
 Write-Host "Created server archive - cleaning up."

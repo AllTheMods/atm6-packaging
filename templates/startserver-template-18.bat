@@ -17,7 +17,7 @@ if not defined ATM7_JAVA (
 )
 
 for /f tokens^=2-5^ delims^=.-_^" %%j in ('"%ATM7_JAVA%" -fullversion 2^>^&1') do set "jver=%%j"
-if not %jver% == 17  (
+if not %jver% geq 17  (
     echo Minecraft 1.18 requires Java 17 - found Java %jver%
     pause
     exit /b 1
