@@ -1,6 +1,4 @@
 @echo off
-set MAX_RAM=5G
-set MIN_RAM=5G
 set FORGE_VERSION=@version@
 :: To use a specific Java runtime, set an environment variable named ATM7_JAVA to the full path of java.exe.
 
@@ -47,7 +45,7 @@ if not exist "server.properties" (
 )
 
 :START
-"%ATM7_JAVA%" -Xmx%MAX_RAM% -Xms%MIN_RAM% -XX:+UseZGC @libraries/net/minecraftforge/forge/1.18.2-%FORGE_VERSION%/win_args.txt nogui
+"%ATM7_JAVA%" @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.18.2-%FORGE_VERSION%/win_args.txt nogui
 
 echo Restarting automatically in 10 seconds (press Ctrl + C to cancel)
 timeout /t 10 /nobreak > NUL

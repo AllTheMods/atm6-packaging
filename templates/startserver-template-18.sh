@@ -1,7 +1,5 @@
 #!/bin/sh
 set -eu
-MAX_RAM=5G
-MIN_RAM=5G
 FORGE_VERSION=@version@
 # To use a specific Java runtime, set an environment variable named ATM7_JAVA to the full path of java.exe.
 
@@ -56,7 +54,7 @@ fi
 
 while true
 do
-    "${ATM7_JAVA:-java}" -Xmx$MAX_RAM -Xms$MIN_RAM -XX:+UseZGC @libraries/net/minecraftforge/forge/1.18.2-$FORGE_VERSION/unix_args.txt nogui
+    "${ATM7_JAVA:-java}" @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.18.2-$FORGE_VERSION/unix_args.txt nogui
     echo "Restarting automatically in 10 seconds (press Ctrl + C to cancel)"
     sleep 10
 done

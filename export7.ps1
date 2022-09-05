@@ -39,6 +39,7 @@ $ignore = @(
     "446253", # Better Biome Blend
     "502561", # Equipment Compare
     "448233", # Entity Culling
+    "401648", # BetterF3
     "280294" # FPS Reducer
 )
 
@@ -88,6 +89,7 @@ foreach($mod in $instanceJson.installedAddons) {
     }
 }
 
+Copy-Item -Path "$PSScriptRoot\templates\user_jvm_args-atm7.txt" -Destination "$tmpPath\user_jvm_args.txt"
 Get-Content "$PSScriptRoot\templates\startserver-template-18.bat" -raw | % {$_.replace('@version@', $forgeVersion)} | Set-Content -NoNewline $batPath
 Get-Content "$PSScriptRoot\templates\startserver-template-18.sh" -raw | % {$_.replace('@version@', $forgeVersion)} | Set-Content -NoNewline $shPath
 
