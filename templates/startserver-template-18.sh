@@ -55,6 +55,11 @@ fi
 while true
 do
     "${ATM7_JAVA:-java}" @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.18.2-$FORGE_VERSION/unix_args.txt nogui
+
+    if [ "${ATM7_RESTART:-true}" = "false" ]; then
+        exit 0
+    fi
+
     echo "Restarting automatically in 10 seconds (press Ctrl + C to cancel)"
     sleep 10
 done

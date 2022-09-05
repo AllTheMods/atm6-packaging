@@ -47,7 +47,10 @@ if not exist "server.properties" (
 :START
 "%ATM7_JAVA%" @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.18.2-%FORGE_VERSION%/win_args.txt nogui
 
+if "%ATM7_RESTART%" == "false" ( 
+    goto:EOF 
+)
+
 echo Restarting automatically in 10 seconds (press Ctrl + C to cancel)
 timeout /t 10 /nobreak > NUL
 goto:START
-pause
