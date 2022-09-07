@@ -2,6 +2,7 @@
 set -eu
 FORGE_VERSION=@version@
 # To use a specific Java runtime, set an environment variable named ATM7_JAVA to the full path of java.exe.
+# To disable automatic restarts, set an environment variable named ATM7_RESTART to false.
 
 INSTALLER="forge-1.18.2-$FORGE_VERSION-installer.jar"
 FORGE_URL="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.18.2-$FORGE_VERSION/forge-1.18.2-$FORGE_VERSION-installer.jar"
@@ -49,7 +50,7 @@ if [ ! -d libraries ]; then
 fi
 
 if [ ! -e server.properties ]; then
-    echo -e "allow-flight=true\nmotd=All the Mods 7" > server.properties
+    printf "allow-flight=true\nmotd=All the Mods 7" > server.properties
 fi
 
 while true
