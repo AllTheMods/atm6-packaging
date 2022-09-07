@@ -2,6 +2,7 @@
 set FORGE_VERSION=@version@
 :: To use a specific Java runtime, set an environment variable named ATM7_JAVA to the full path of java.exe.
 :: To disable automatic restarts, set an environment variable named ATM7_RESTART to false.
+:: To install the pack without starting the server, set an environment variable named ATM7_INSTALL_ONLY to true.
 
 set INSTALLER="%~dp0forge-1.18.2-%FORGE_VERSION%-installer.jar"
 set FORGE_URL="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.18.2-%FORGE_VERSION%/forge-1.18.2-%FORGE_VERSION%-installer.jar"
@@ -43,6 +44,11 @@ if not exist "server.properties" (
         echo allow-flight=true
         echo motd=All the Mods 7
     )> "server.properties"
+)
+
+if "%ATM7_INSTALL_ONLY%" == "true" (
+    echo INSTALL_ONLY: complete
+    goto:EOF
 )
 
 :START
