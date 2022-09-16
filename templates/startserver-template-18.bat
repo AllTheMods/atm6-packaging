@@ -18,13 +18,6 @@ if not defined ATM7_JAVA (
    exit /b 1
 )
 
-for /f tokens^=2-5^ delims^=.-_^" %%j in ('"%ATM7_JAVA%" -fullversion 2^>^&1') do set "jver=%%j"
-if not %jver% geq 17  (
-    echo Minecraft 1.18 requires Java 17 - found Java %jver%
-    pause
-    exit /b 1
-) 
-
 :FORGE
 setlocal
 cd /D "%~dp0"
@@ -43,6 +36,7 @@ if not exist "server.properties" (
     (
         echo allow-flight=true
         echo motd=All the Mods 7
+        echo max-tick-time=180000
     )> "server.properties"
 )
 
@@ -50,6 +44,13 @@ if "%ATM7_INSTALL_ONLY%" == "true" (
     echo INSTALL_ONLY: complete
     goto:EOF
 )
+
+for /f tokens^=2-5^ delims^=.-_^" %%j in ('"%ATM7_JAVA%" -fullversion 2^>^&1') do set "jver=%%j"
+if not %jver% geq 17  (
+    echo Minecraft 1.18 requires Java 17 - found Java %jver%
+    pause
+    exit /b 1
+) 
 
 :START
 "%ATM7_JAVA%" @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.18.2-%FORGE_VERSION%/win_args.txt nogui

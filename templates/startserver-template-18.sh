@@ -19,13 +19,6 @@ if ! command -v "${ATM7_JAVA:-java}" >/dev/null 2>&1; then
     exit 1
 fi
 
-JAVA_VERSION=$("${ATM7_JAVA:-java}" -fullversion 2>&1 | awk -F '"' '/version/ {print $2}' | cut -d'.' -f1)
-if [ ! "$JAVA_VERSION" -ge 17 ]; then
-    echo "Minecraft 1.18 requires Java 17 - found Java $JAVA_VERSION"
-    pause
-    exit 1
-fi
-
 cd "$(dirname "$0")"
 if [ ! -d libraries ]; then
     echo "Forge not installed, installing now."
@@ -51,12 +44,19 @@ if [ ! -d libraries ]; then
 fi
 
 if [ ! -e server.properties ]; then
-    printf "allow-flight=true\nmotd=All the Mods 7" > server.properties
+    printf "allow-flight=true\nmotd=All the Mods 7\nmax-tick-time=180000" > server.properties
 fi
 
 if [ "${ATM7_INSTALL_ONLY:-false}" = "true" ]; then
     echo "INSTALL_ONLY: complete"
     exit 0
+fi
+
+JAVA_VERSION=$("${ATM7_JAVA:-java}" -fullversion 2>&1 | awk -F '"' '/version/ {print $2}' | cut -d'.' -f1)
+if [ ! "$JAVA_VERSION" -ge 17 ]; then
+    echo "Minecraft 1.18 requires Java 17 - found Java $JAVA_VERSION"
+    pause
+    exit 1
 fi
 
 while true
