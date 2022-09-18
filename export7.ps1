@@ -4,8 +4,6 @@ $ErrorActionPreference = "Stop"
 $source = "C:\Games\CurseForge\Minecraft\Instances\All_The_Mods_7"
 $overridePath = "$PSScriptRoot\overrides"
 $manifestPath = "$PSScriptRoot\manifest.json"
-$serverPath = "$PSScriptRoot\server"
-$cachePath = "$PSScriptRoot\cache"
 $tmpPath = "$PSScriptRoot\tmp"
 $modsPath = "$tmpPath\mods"
 $batPath = "$tmpPath\startserver.bat"
@@ -40,6 +38,7 @@ $ignore = @(
     "502561", # Equipment Compare
     "448233", # Entity Culling
     "401648", # BetterF3
+    "583228", # SimpleBackups
     "280294" # FPS Reducer
 )
 
