@@ -3,9 +3,9 @@ set FORGE_VERSION=@version@
 :: To use a specific Java runtime, set an environment variable named ATM7_JAVA to the full path of java.exe.
 :: To disable automatic restarts, set an environment variable named ATM7_RESTART to false.
 :: To install the pack without starting the server, set an environment variable named ATM7_INSTALL_ONLY to true.
-
+set MIRROR=https://maven.allthehosting.com/releases/
 set INSTALLER="%~dp0forge-1.18.2-%FORGE_VERSION%-installer.jar"
-set FORGE_URL="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.18.2-%FORGE_VERSION%/forge-1.18.2-%FORGE_VERSION%-installer.jar"
+set FORGE_URL="%MIRROR%net/minecraftforge/forge/1.18.2-%FORGE_VERSION%/forge-1.18.2-%FORGE_VERSION%-installer.jar"
 
 :JAVA
 if not defined ATM7_JAVA (
@@ -29,7 +29,7 @@ if not exist "libraries" (
     )
     
     echo Running Forge installer.
-    "%ATM7_JAVA%" -jar %INSTALLER% -installServer
+    "%ATM7_JAVA%" -jar %INSTALLER% -installServer -mirror %MIRROR%
 )
 
 if not exist "server.properties" (

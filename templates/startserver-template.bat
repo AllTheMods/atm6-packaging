@@ -13,13 +13,13 @@ set FORGE_URL="http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.
 
 if not exist "%~dp0forge-1.16.5-%FORGE_VERSION%.jar" (
     echo Forge not installed, installing now.
-    if not exist "%INSTALLER%" (
+    if not exist %INSTALLER% (
         echo No Forge installer found, downloading from %FORGE_URL%
-        bitsadmin.exe /rawreturn /nowrap /transfer forgeinstaller /download /priority FOREGROUND "%FORGE_URL%" "%INSTALLER%"
+        bitsadmin.exe /rawreturn /nowrap /transfer forgeinstaller /download /priority FOREGROUND %FORGE_URL% %INSTALLER%
     )
     
     echo Running Forge installer.
-    "%ATM6_JAVA%" -jar "%INSTALLER%" -installServer
+    "%ATM6_JAVA%" -jar %INSTALLER% -installServer
 )
 
 :START
