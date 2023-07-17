@@ -28,6 +28,7 @@ $ignore = @(
     "227441", # Fullscreen Windowed
     "235716", # Better Achievements
     "221849", # FogNerf
+    "431430", # FlickerFix
     "280294" # FPS Reducer
 )
 
