@@ -39,6 +39,8 @@ $ignore = @(
     "448233", # Entity Culling
     "401648", # BetterF3
     "583228", # SimpleBackups
+    "630188", # Dynamic Surroundings Resurrected
+    "557796", # Effective (Forge)
     "280294" # FPS Reducer
 )
 

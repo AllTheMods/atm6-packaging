@@ -29,6 +29,7 @@ $ignore = @(
     "235716", # Better Achievements
     "221849", # FogNerf
     "431430", # FlickerFix
+    "252373", # LegibleNEI
     "280294" # FPS Reducer
 )
 
