@@ -40,6 +40,9 @@ $ignore = @(
     "446253", # Better Biome Blend
     "502561", # Equipment Compare
     "448233", # Entity Culling
+    "908741", # Embeddium
+    "581495", # Oculus
+    "385587", # Complementary Shaders
     "280294" # FPS Reducer
 )
 
