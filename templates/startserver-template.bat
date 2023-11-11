@@ -32,6 +32,7 @@ if not exist "server.properties" (
     (
         echo allow-flight=true
         echo motd=All the Mods 6
+        echo max-tick-time=180000
     )> "server.properties"
 )
 

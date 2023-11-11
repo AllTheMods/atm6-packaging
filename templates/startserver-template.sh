@@ -39,7 +39,7 @@ if [ ! -d libraries ]; then
 fi
 
 if [ ! -e server.properties ]; then
-    printf "allow-flight=true\nmotd=All the Mods 6" > server.properties
+    printf "allow-flight=true\nmotd=All the Mods 6\nmax-tick-time=180000" > server.properties
 fi
 
 if [ "${ATM6_INSTALL_ONLY:-false}" = "true" ]; then
