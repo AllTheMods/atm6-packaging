@@ -73,33 +73,6 @@ $instanceJson = Get-Content $instancePath -raw | ConvertFrom-Json
 $forgeVersion = $instanceJson.baseModLoader.forgeVersion;
 Write-Host "Manifest uses Forge $forgeVersion."
 
-# start generate Forge server files
-
-$installerUrl = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.16.5-${forgeVersion}/forge-1.16.5-${forgeVersion}-installer.jar"
-$installerFile = Split-Path -Path $installerUrl -Leaf
-$installerPath = "$cachePath\$installerFile"
-$installedPath = "$serverPath\forge-${forgeVersion}"
-
-if (-Not (Test-Path -Path $installerPath)) {
-    Write-Host "$installerFile not found in cache. Downloading..."
-    New-Item -Path $cachePath -Type Directory -Force | Out-Null
-    Invoke-WebRequest -Uri $installerUrl -OutFile $installerPath
-}
-
-if (-Not (Test-Path -Path $installedPath)) {
-    Write-Host "No existing installation for Forge $forgeVersion. Running installer..."
-    New-Item -Path $installedPath -Type Directory -Force | Out-Null
-    try {
-        Push-Location -Path $installedPath
-        java -jar $installerPath -installServer
-    } finally {
-        Pop-Location
-    }    
-}
-
-Write-Host "Server installation done."
-
-# end generate Forge server files
 # start generate server pack
 
 $serverDest = "ATM6-dev-$version-server.zip"

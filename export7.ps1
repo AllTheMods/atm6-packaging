@@ -41,6 +41,10 @@ $ignore = @(
     "583228", # SimpleBackups
     "630188", # Dynamic Surroundings Resurrected
     "557796", # Effective (Forge)
+    "908741", # Embeddium
+    "581495", # Oculus
+    "659897", # Oculus & Flywheel Compat
+    "385587", # Complementary Shaders
     "280294" # FPS Reducer
 )
 
