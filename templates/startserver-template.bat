@@ -6,6 +6,8 @@ set FORGE_VERSION=@version@
 :: To disable automatic restarts, set an environment variable named ATM6_RESTART to false.
 :: To install the pack without starting the server, set an environment variable named ATM6_INSTALL_ONLY to true.
 set MIRROR=https://maven.allthehosting.com/releases/
+:: If the ATM mirror goes down, uncomment this to use the Forge maven instead.
+:: set MIRROR=https://maven.minecraftforge.net/
 set INSTALLER="%~dp0forge-1.16.5-%FORGE_VERSION%-installer.jar"
 set FORGE_URL="%MIRROR%net/minecraftforge/forge/1.16.5-%FORGE_VERSION%/forge-1.16.5-%FORGE_VERSION%-installer.jar"
 
@@ -21,7 +23,7 @@ if not exist "libraries" (
     echo Forge not installed, installing now.
     if not exist %INSTALLER% (
         echo No Forge installer found, downloading from %FORGE_URL%
-        bitsadmin.exe /rawreturn /nowrap /transfer forgeinstaller /download /priority FOREGROUND %FORGE_URL% %INSTALLER%
+        powershell -Command "Invoke-WebRequest %FORGE_URL% -OutFile %INSTALLER%"
     )
     
     echo Running Forge installer.
