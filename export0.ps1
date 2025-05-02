@@ -30,7 +30,13 @@ $ignore = @(
     "221849", # FogNerf
     "431430", # FlickerFix
     "252373", # LegibleNEI
+    "988067", # Angelica
+    "385587", # Complementary Shaders
     "280294" # FPS Reducer
+)
+
+$added = @(
+    "tcneiadditions-1.4.8.jar"
 )
 
 if ( -Not (Test-Path $source)) {
@@ -44,6 +50,7 @@ if ( -Not (Test-Path $overridePath)) {
 }
 
 Get-ChildItem $overridePath -Exclude "config", "scripts", "resources", "local" | Remove-Item -Recurse
+New-Item -Type Directory -Force "$overridePath\mods"
 
 Write-Host "Loading CurseForge manifest..."
 Write-HOST "If you have added any mods, you MUST run the game once to update the Curseforge instance JSON.".
@@ -70,6 +77,11 @@ foreach($mod in $instanceJson.installedAddons) {
         $filename = $mod.installedFile.FileNameOnDisk
         Copy-Item -LiteralPath "$source\mods\$filename" -Destination "$modsPath\$filename"
     }
+}
+
+foreach ($filename in $added) {
+    Copy-Item -LiteralPath "$source\mods\$filename" -Destination "$modsPath\$filename"
+    Copy-Item -LiteralPath "$source\mods\$filename" -Destination "$overridePath\mods\$filename"
 }
 
 Get-Content "$PSScriptRoot\templates\startserver-template-0.bat" -raw | % {$_.replace('@version@', $forgeVersion)} | Set-Content -NoNewline $batPath
