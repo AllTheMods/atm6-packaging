@@ -35,9 +35,8 @@ $ignore = @(
     "280294" # FPS Reducer
 )
 
-$added = @(
-    "aspectrecipeindex-1.1.5.jar"
-)
+$ignoreFiles = New-Object 'System.Collections.Generic.HashSet[System.String]'
+$manifestFiles = New-Object 'System.Collections.Generic.HashSet[System.String]'
 
 if ( -Not (Test-Path $source)) {
     Write-Host "No CurseForge instance found with the name All_The_Mods_0" -ForegroundColor Red
@@ -60,6 +59,15 @@ $instanceJson = Get-Content $instancePath -raw | ConvertFrom-Json
 $forgeVersion = $instanceJson.baseModLoader.forgeVersion;
 Write-Host "Manifest uses Forge $forgeVersion."
 
+foreach($mod in $instanceJson.installedAddons) {
+    $filename = $mod.installedFile.FileNameOnDisk
+    $manifestFiles.Add($filename) | Out-Null
+    
+    if ($ignore -contains $mod.addonID) {    
+        $ignoreFiles.Add($filename) | Out-Null
+    }
+}
+
 # start generate server pack
 
 $serverDest = "ATM0-dev-$version-server.zip"
@@ -70,18 +78,16 @@ if (Test-Path $serverDest) {
     Remove-Item $serverDest
 }
 
-
 New-Item -Path $modsPath  -Type Directory -Force | Out-Null
-foreach($mod in $instanceJson.installedAddons) {
-    if (-Not ($ignore -contains $mod.addonID)) {
-        $filename = $mod.installedFile.FileNameOnDisk
-        Copy-Item -LiteralPath "$source\mods\$filename" -Destination "$modsPath\$filename"
-    }
-}
 
-foreach ($filename in $added) {
-    Copy-Item -LiteralPath "$source\mods\$filename" -Destination "$modsPath\$filename"
-    Copy-Item -LiteralPath "$source\mods\$filename" -Destination "$overridePath\mods\$filename"
+Get-ChildItem "$source\mods" -Filter *.jar | ForEach-Object {
+    $filename = $_.Name
+    if ( -Not ($ignoreFiles.Contains($filename))) {
+        Copy-Item -LiteralPath "$source\mods\$filename" -Destination "$modsPath\$filename"
+        if (-Not ($manifestFiles.Contains($_.Name))) {
+            Copy-Item -LiteralPath "$source\mods\$filename" -Destination "$overridePath\mods\$filename"
+        }
+    }
 }
 
 Get-Content "$PSScriptRoot\templates\startserver-template-0.bat" -raw | % {$_.replace('@version@', $forgeVersion)} | Set-Content -NoNewline $batPath
