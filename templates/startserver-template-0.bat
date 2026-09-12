@@ -27,7 +27,7 @@ if not exist "libraries" (
     echo Forge not installed, installing now.
     if not exist %INSTALLER% (
         echo No Forge installer found, downloading from %FORGE_URL%
-        bitsadmin.exe /rawreturn /nowrap /transfer forgeinstaller /download /priority FOREGROUND %FORGE_URL% %INSTALLER%
+        powershell -Command "Invoke-WebRequest %FORGE_URL% -OutFile %INSTALLER%"
     )
     
     echo Running Forge installer.

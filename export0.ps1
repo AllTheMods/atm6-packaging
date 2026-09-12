@@ -36,7 +36,7 @@ $ignore = @(
 )
 
 $added = @(
-    "tcneiadditions-1.4.8.jar"
+    "aspectrecipeindex-1.1.5.jar"
 )
 
 if ( -Not (Test-Path $source)) {
